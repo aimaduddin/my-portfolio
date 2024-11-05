@@ -1,4 +1,13 @@
-export default function AdminDashboard() {
+import { createServerClient } from '@/lib/supabase-server'
+
+export default async function AdminPage() {
+  const supabase = createServerClient()
+  
+  // Example query
+  const { data: projects } = await supabase
+    .from('projects')
+    .select('*')
+
   return (
     <div>
       <div className="mb-6">
