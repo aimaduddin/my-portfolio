@@ -67,6 +67,47 @@ export type Database = {
           features?: string[] | null
           order?: number
         }
+      },
+      experiences: {
+        Row: {
+          id: string
+          created_at: string
+          title: string
+          company: string
+          location: string | null
+          start_date: string
+          end_date: string | null
+          description: string | null
+          responsibilities: string[] | null
+          is_current: boolean
+          order: number
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          title: string
+          company: string
+          location?: string | null
+          start_date: string
+          end_date?: string | null
+          description?: string | null
+          responsibilities?: string[] | null
+          is_current?: boolean
+          order?: number
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          title?: string
+          company?: string
+          location?: string | null
+          start_date?: string
+          end_date?: string | null
+          description?: string | null
+          responsibilities?: string[] | null
+          is_current?: boolean
+          order?: number
+        }
       }
     }
     Views: {

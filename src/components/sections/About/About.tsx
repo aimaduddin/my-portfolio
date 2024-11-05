@@ -1,8 +1,11 @@
 'use client'
 import { motion } from 'framer-motion'
-import { experiences } from '@/data/experience'
+import { getPublicExperiences } from '@/lib/experiences'
+import { format } from 'date-fns'
 
-export default function About() {
+export default async function About() {
+  const experiences = await getPublicExperiences()
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,36 +66,52 @@ export default function About() {
                   {/* Content */}
                   <div className="w-5/12">
                     <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm 
-                        ${experience.type === 'work' 
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-purple-100 text-purple-800'
-                        } mb-3`}
-                      >
-                        {experience.type === 'work' ? 'Work' : 'Education'}
-                      </span>
                       <h3 className="text-xl font-bold text-gray-900 mb-1">
                         {experience.title}
                       </h3>
                       <p className="text-gray-600 mb-2">
                         {experience.company} • {experience.location}
                       </p>
-                      <p className="text-sm text-gray-500 mb-4">{experience.period}</p>
-                      <ul className="space-y-2">
-                        {experience.description.map((item, i) => (
-                          <li key={i} className="text-gray-600 text-sm">
-                            • {item}
-                          </li>
-                        ))}
-                      </ul>
+                      <p className="text-sm text-gray-500 mb-4">
+                        {format(new Date(experience.start_date), 'MMM yyyy')} - {' '}
+                        {experience.is_current 
+                          ? 'Present'
+                          : experience.end_date 
+                            ? format(new Date(experience.end_date), 'MMM yyyy')
+                            : ''
+                        }
+                      </p>
+                      {experience.description && (
+                        <p className="text-gray-600 mb-4">{experience.description}</p>
+                      )}
+                      {experience.responsibilities && experience.responsibilities.length > 0 && (
+                        <ul className="space-y-2">
+                          {experience.responsibilities.map((item, i) => (
+                            <li key={i} className="text-gray-600 text-sm flex items-start">
+                              <svg 
+                                className="w-4 h-4 text-blue-500 mr-2 mt-1 flex-shrink-0" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                stroke="currentColor"
+                              >
+                                <path 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round" 
+                                  strokeWidth={2} 
+                                  d="M5 13l4 4L19 7" 
+                                />
+                              </svg>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </div>
 
                   {/* Timeline dot */}
                   <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
-                    <div className={`w-4 h-4 rounded-full border-4 border-white 
-                      ${experience.type === 'work' ? 'bg-blue-600' : 'bg-purple-600'}`}
-                    />
+                    <div className="w-4 h-4 rounded-full border-4 border-white bg-blue-600" />
                   </div>
                 </motion.div>
               ))}

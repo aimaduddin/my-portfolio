@@ -9,6 +9,7 @@ import CTA from '@/components/sections/CTA'
 import Contact from '@/components/sections/Contact'
 import Footer from '@/components/layout/Footer'
 import { Suspense } from 'react'
+import Experience from '@/components/sections/Experience/Experience'
 
 export default function Home() {
   return (
