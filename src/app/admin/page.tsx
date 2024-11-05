@@ -1,12 +1,9 @@
-import { createServerClient } from '@/lib/supabase-server'
+import { getProjects } from '@/lib/projects'
+import Link from 'next/link'
 
 export default async function AdminPage() {
-  const supabase = createServerClient()
-  
-  // Example query
-  const { data: projects } = await supabase
-    .from('projects')
-    .select('*')
+  const projects = await getProjects()
+  const projectCount = projects.length
 
   return (
     <div>
@@ -18,7 +15,7 @@ export default async function AdminPage() {
         {/* Quick Stats */}
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Projects</h3>
-          <p className="text-3xl font-bold text-blue-600">12</p>
+          <p className="text-3xl font-bold text-blue-600">{projectCount}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
@@ -35,7 +32,7 @@ export default async function AdminPage() {
       <div className="mt-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <a
+          <Link
             href="/admin/projects"
             className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
           >
@@ -45,9 +42,9 @@ export default async function AdminPage() {
             <p className="text-gray-600">
               Add, edit, or remove portfolio projects
             </p>
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/admin/services"
             className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
           >
@@ -57,9 +54,9 @@ export default async function AdminPage() {
             <p className="text-gray-600">
               Update your service offerings
             </p>
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/admin/testimonials"
             className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
           >
@@ -69,7 +66,7 @@ export default async function AdminPage() {
             <p className="text-gray-600">
               Add or update client testimonials
             </p>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -19,9 +19,30 @@ export default function ProjectForm({ project, onSuccess, onCancel }: ProjectFor
     image_url: project?.image_url ?? '',
     live_url: project?.live_url ?? '',
     github_url: project?.github_url ?? '',
+    tags: project?.tags ?? [],
+    is_featured: project?.is_featured ?? false
   })
+  const [tagInput, setTagInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && tagInput.trim()) {
+      e.preventDefault()
+      setFormData(prev => ({
+        ...prev,
+        tags: [...(prev.tags || []), tagInput.trim()]
+      }))
+      setTagInput('')
+    }
+  }
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setFormData(prev => ({
+      ...prev,
+      tags: prev.tags?.filter(tag => tag !== tagToRemove) || []
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -112,6 +133,52 @@ export default function ProjectForm({ project, onSuccess, onCancel }: ProjectFor
           onChange={e => setFormData({ ...formData, github_url: e.target.value })}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Tags</label>
+        <div className="mt-1">
+          <input
+            type="text"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={handleAddTag}
+            placeholder="Press Enter to add tag"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+        {formData.tags && formData.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-2">
+            {formData.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
+              >
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveTag(tag)}
+                  className="ml-2 text-blue-600 hover:text-blue-800"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-center">
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={formData.is_featured ?? false}
+            onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+          <span className="ms-3 text-sm font-medium text-gray-700">Featured Project</span>
+        </label>
       </div>
 
       <div className="flex justify-end gap-2">

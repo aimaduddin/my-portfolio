@@ -38,6 +38,18 @@ export default async function Projects() {
                 <p className="text-gray-600 mb-4">
                   {project.description}
                 </p>
+                {project.tags && project.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 <div className="flex space-x-4">
                   {project.live_url && (
                     <Link

@@ -100,8 +100,9 @@ export async function getPublicProjects() {
   const { data: projects, error } = await supabase
     .from('projects')
     .select('*')
+    .filter('is_featured', 'eq', true)
     .order('created_at', { ascending: false })
-    .limit(6) // Limit to 6 projects or adjust as needed
+    .limit(6)
 
   if (error) {
     console.error('Error fetching public projects:', error)
@@ -109,4 +110,38 @@ export async function getPublicProjects() {
   }
   
   return projects
+}
+
+export async function getProjectsWithPagination(
+  page: number = 1,
+  limit: number = 5,
+  search: string = ''
+) {
+  const supabase = createServerClient()
+  const offset = (page - 1) * limit
+
+  let query = supabase
+    .from('projects')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    
+  // Add search filter if search term exists
+  if (search) {
+    query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`)
+  }
+
+  const { data: projects, error, count } = await query
+    .range(offset, offset + limit - 1)
+
+  if (error) {
+    console.error('Error fetching projects:', error)
+    throw new Error(`Failed to fetch projects: ${error.message}`)
+  }
+  
+  return {
+    projects,
+    total: count ?? 0,
+    page,
+    totalPages: Math.ceil((count ?? 0) / limit)
+  }
 } 

@@ -10,6 +10,8 @@ export type Database = {
           image_url: string | null
           live_url: string | null
           github_url: string | null
+          tags: string[] | null
+          is_featured: boolean
         }
         Insert: {
           id?: string
@@ -19,6 +21,8 @@ export type Database = {
           image_url?: string | null
           live_url?: string | null
           github_url?: string | null
+          tags?: string[] | null
+          is_featured?: boolean
         }
         Update: {
           id?: string
@@ -28,6 +32,8 @@ export type Database = {
           image_url?: string | null
           live_url?: string | null
           github_url?: string | null
+          tags?: string[] | null
+          is_featured?: boolean
         }
       }
     }
