@@ -35,6 +35,38 @@ export type Database = {
           tags?: string[] | null
           is_featured?: boolean
         }
+      },
+      services: {
+        Row: {
+          id: string
+          created_at: string
+          title: string
+          description: string | null
+          icon: string | null
+          is_active: boolean
+          features: string[] | null
+          order: number
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          title: string
+          description?: string | null
+          icon?: string | null
+          is_active?: boolean
+          features?: string[] | null
+          order?: number
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          title?: string
+          description?: string | null
+          icon?: string | null
+          is_active?: boolean
+          features?: string[] | null
+          order?: number
+        }
       }
     }
     Views: {

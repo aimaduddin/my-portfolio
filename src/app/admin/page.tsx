@@ -1,9 +1,15 @@
 import { getProjects } from '@/lib/projects'
+import { getServices } from '@/lib/services'
 import Link from 'next/link'
 
 export default async function AdminPage() {
-  const projects = await getProjects()
+  const [projects, services] = await Promise.all([
+    getProjects(),
+    getServices()
+  ])
+
   const projectCount = projects.length
+  const serviceCount = services.length
 
   return (
     <div>
@@ -20,7 +26,7 @@ export default async function AdminPage() {
 
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Services</h3>
-          <p className="text-3xl font-bold text-blue-600">4</p>
+          <p className="text-3xl font-bold text-blue-600">{serviceCount}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">

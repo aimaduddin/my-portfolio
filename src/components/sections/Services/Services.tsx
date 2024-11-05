@@ -1,91 +1,60 @@
 'use client'
-import { motion } from 'framer-motion'
-import { services } from '@/data/services'
+import { getPublicServices } from '@/lib/services'
 
-export default function Services() {
+export default async function Services() {
+  const services = await getPublicServices()
+
   return (
-    <section className="py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Services
-          </h2>
-          <p className="text-lg text-gray-600">
-            Specialized web development services tailored to your needs
+    <section id="services" className="py-20">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">My Services</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Here are the services I offer. Each service is tailored to meet your specific needs and requirements.
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {services.map((service, index) => (
-            <motion.div
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service) => (
+            <div
               key={service.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group"
+              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="h-full bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden">
-                {/* Background Decoration */}
-                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500" />
-
-                {/* Icon */}
-                <div className="relative mb-6">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 text-white">
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d={service.icon}
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="relative">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    {service.description}
-                  </p>
-
-                  {/* Features List */}
-                  <ul className="space-y-2">
-                    {service.features.map((feature, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center text-gray-600 text-sm"
+              {service.icon && (
+                <div 
+                  className="w-12 h-12 text-blue-600 mb-4"
+                  dangerouslySetInnerHTML={{ __html: service.icon }}
+                />
+              )}
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                {service.title}
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {service.description}
+              </p>
+              {service.features && service.features.length > 0 && (
+                <ul className="space-y-2">
+                  {service.features.map((feature, index) => (
+                    <li key={index} className="flex items-center text-gray-700">
+                      <svg 
+                        className="w-4 h-4 text-blue-500 mr-2" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
                       >
-                        <svg
-                          className="w-4 h-4 text-blue-600 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12l2 2 4-4"
-                          />
-                        </svg>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </motion.div>
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M5 13l4 4L19 7" 
+                        />
+                      </svg>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           ))}
         </div>
       </div>

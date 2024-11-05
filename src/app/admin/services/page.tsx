@@ -1,49 +1,39 @@
 'use client'
-import { useState } from 'react'
-import DataTable from '@/components/admin/DataTable'
-import { services } from '@/data/services'
+import { getServicesWithPagination } from '@/lib/services'
+import ServiceList from '@/components/admin/services/ServiceList'
+import NewServiceButton from '@/components/admin/services/NewServiceButton'
+import SearchBar from '@/components/admin/services/SearchBar'
+import Pagination from '@/components/admin/services/Pagination'
 
-const columns = [
-  { key: 'title', label: 'Title' },
-  { key: 'description', label: 'Description' },
-]
-
-export default function ServicesAdmin() {
-  const [isEditing, setIsEditing] = useState(false)
-  const [selectedService, setSelectedService] = useState(null)
-
-  const handleEdit = (service: any) => {
-    setSelectedService(service)
-    setIsEditing(true)
-  }
-
-  const handleDelete = async (service: any) => {
-    if (window.confirm('Are you sure you want to delete this service?')) {
-      console.log('Deleting service:', service)
-    }
-  }
+export default async function ServicesPage({
+  searchParams,
+}: {
+  searchParams: { page?: string; search?: string }
+}) {
+  const page = Number(searchParams.page) || 1
+  const search = searchParams.search || ''
+  const { services, total, totalPages } = await getServicesWithPagination(page, 5, search)
 
   return (
     <div>
-      <div className="mb-6 flex justify-between items-center">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">Services</h1>
-        <button
-          onClick={() => {
-            setSelectedService(null)
-            setIsEditing(true)
-          }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-        >
-          Add New Service
-        </button>
+        <NewServiceButton />
       </div>
 
-      <DataTable
-        columns={columns}
-        data={services}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <div className="mb-6">
+        <SearchBar defaultValue={search} />
+      </div>
+
+      <ServiceList initialServices={services} />
+
+      <div className="mt-6">
+        <Pagination currentPage={page} totalPages={totalPages} />
+      </div>
+
+      <div className="mt-4 text-sm text-gray-600">
+        Total Services: {total}
+      </div>
     </div>
   )
 } 
